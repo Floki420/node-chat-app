@@ -12,10 +12,23 @@ var io= socketIO(server);
 
 io.on('connection',(socket)=>{
     console.log('A user is connected');
+    socket.emit('newMessage',{
+        from:'Admin',
+        text:'Welcome to the Chat app',
+        createAt:new Date().getTime()
+    });
+    socket.broadcast.emit('newMessage',{
+        from:'Admin',
+        text:'A new User Has joined',
+        createAt:new Date().getTime()
+    });
+    
+    
     socket.on('disconnect',()=>{
         console.log('User is disconneted');
     });
     
+
     socket.on('createMessage',(message)=>{
         console.log('create Message',message);
         io.emit('newMessage',{
@@ -23,6 +36,11 @@ io.on('connection',(socket)=>{
             text:message.text,
             createAt:new Date().getTime()
         });
+        // socket.broadcast.emit('newMessage',{
+        //     from :  message.from,
+        //     text : message.text,
+        //     createAt : new Date().getTime()
+        // });
     });
 });
 
