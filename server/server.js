@@ -2,6 +2,7 @@ const path=require('path');
 const express=require('express');
 const socketIO=require('socket.io');
 const http= require('http');
+const {generateMessage}=require('./utils/message');
 
 const publicpath=path.join(__dirname , '../public');
 const port= process.env.PORT||3000;
@@ -12,16 +13,8 @@ var io= socketIO(server);
 
 io.on('connection',(socket)=>{
     console.log('A user is connected');
-    socket.emit('newMessage',{
-        from:'Admin',
-        text:'Welcome to the Chat app',
-        createAt:new Date().getTime()
-    });
-    socket.broadcast.emit('newMessage',{
-        from:'Admin',
-        text:'A new User Has joined',
-        createAt:new Date().getTime()
-    });
+    socket.emit('newMessage',generateMessage('Admin','Welcome to the chat app'));
+    socket.broadcast.emit('newMessage',generateMessage('Admin','New User Arrived'));
     
     
     socket.on('disconnect',()=>{
@@ -31,11 +24,7 @@ io.on('connection',(socket)=>{
 
     socket.on('createMessage',(message)=>{
         console.log('create Message',message);
-        io.emit('newMessage',{
-            from:message.from,
-            text:message.text,
-            createAt:new Date().getTime()
-        });
+        io.emit('newMessage',generateMessage(message.from,message.text));
         // socket.broadcast.emit('newMessage',{
         //     from :  message.from,
         //     text : message.text,
