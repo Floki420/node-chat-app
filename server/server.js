@@ -15,13 +15,14 @@ io.on('connection',(socket)=>{
     socket.on('disconnect',()=>{
         console.log('User is disconneted');
     });
-    socket.emit('newMessage',{
-        from:"someone",
-        text:"kskskdif",
-        createAt:123
-    });
+    
     socket.on('createMessage',(message)=>{
         console.log('create Message',message);
+        io.emit('newMessage',{
+            from:message.from,
+            text:message.text,
+            createAt:new Date().getTime()
+        });
     });
 });
 
