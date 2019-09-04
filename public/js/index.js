@@ -24,7 +24,7 @@ socket.on('newLocationMessage',function(message){
     li.text(`${message.from}`);
     a.attr('href',message.url);
     li.append(a);
-    jQuery('#messages').append(li);
+    jQuery('#messages').append(li); 
 });
 
 jQuery('#message-form').on('submit',function(e){
